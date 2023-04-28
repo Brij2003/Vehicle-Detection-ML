@@ -24,20 +24,18 @@ def detect():
 
     # Collect file from HTML form (webpage)
     received_file = request.files['image']
-    print("received_file-----------", received_file)
-    print("Video filename ---------- ", received_file.filename)
 
     # Saves the file which was uploaded as Input
     FILE_PATH = os.path.join(uploads_dir, secure_filename(received_file.filename))
     received_file.save(FILE_PATH)
-    print("FILE_PATH: --------"  , FILE_PATH)
 
     # Pass the img to model to get output
     subprocess.run(['python', 'detect.py', '--source', FILE_PATH],shell=True)
 
     # return os.path.join(uploads_dir, secure_filename(received_file.filename))
     obj = secure_filename(received_file.filename)
-    return obj
+
+    return render_template('index.html', obj=obj)
 
 
 @app.route("/opencam", methods=['GET'])
@@ -51,7 +49,7 @@ def opencam():
 def return_file():
     obj = request.args.get('obj')
     loc = os.path.join("runs/detect", obj)
-    print(loc)
+    print("loc: ----" , loc)
     try:
         return send_file(os.path.join("runs/detect", obj), attachment_filename=obj)
         # return send_from_directory(loc, obj)

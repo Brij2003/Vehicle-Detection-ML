@@ -24,7 +24,7 @@
         <button name="cam" class="button" id="opencam">Video Cam</button>
         <br/>
         <hr class="line" />
-        <form >
+        <form action="/detect" method="post" enctype="multipart/form-data">
           <input
             id="imageinput"
             type="file"
@@ -34,9 +34,12 @@
           <button name="send"  class="button" type="submit" >Send</button>
         </form>
         <br/>
-        <div id="link">
-          <a href="" id="download" download>Download</a>
-        </div>
+        {% if obj %}
+          <!-- <div id="link">
+            <a href="" id="download" download>Download</a>
+          </div> -->
+          <img src="../static/traffic-img.jpg" alt="">
+        {% endif %}
       </header>
     </div>
   </body>
