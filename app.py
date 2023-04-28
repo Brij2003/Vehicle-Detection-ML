@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename, send_from_directory
 import os
 import subprocess
 import subprocess
-    
+
 app = Flask(__name__)
 
 
@@ -22,18 +22,21 @@ def detect():
     if not request.method == "POST":
         return
 
-    video = request.files['image']
-    print("Video-----------", video)
-    print("Video filename ---------- ", video.filename)
+    # Collect file from HTML form (webpage)
+    received_file = request.files['image']
+    print("received_file-----------", received_file)
+    print("Video filename ---------- ", received_file.filename)
 
-    RES_PATH = os.path.join(uploads_dir, secure_filename(video.filename))
-    video.save(RES_PATH)
-    print("video save: --------"  , RES_PATH)
+    # Saves the file which was uploaded as Input
+    FILE_PATH = os.path.join(uploads_dir, secure_filename(received_file.filename))
+    received_file.save(FILE_PATH)
+    print("FILE_PATH: --------"  , FILE_PATH)
 
-    subprocess.run(['python', 'detect.py', '--source', os.path.join(uploads_dir, secure_filename(video.filename))],shell=True)
+    # Pass the img to model to get output
+    subprocess.run(['python', 'detect.py', '--source', FILE_PATH],shell=True)
 
-    # return os.path.join(uploads_dir, secure_filename(video.filename))
-    obj = secure_filename(video.filename)
+    # return os.path.join(uploads_dir, secure_filename(received_file.filename))
+    obj = secure_filename(received_file.filename)
     return obj
 
 
